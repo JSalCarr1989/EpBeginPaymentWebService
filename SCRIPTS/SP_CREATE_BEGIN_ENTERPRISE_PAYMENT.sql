@@ -1,0 +1,31 @@
+CREATE PROCEDURE SP_CREATE_BEGIN_ENTERPRISE_PAYMENT
+                 (
+				  @BILLING_ACCOUNT VARCHAR(30),
+				  @SERVICE_REQUEST VARCHAR(64),
+				  @PAYMENT_REFERENCE VARCHAR(50),
+				  @CREATE_TOKEN VARCHAR(1),
+				  @BEGIN_PAYMENT_ID INT OUTPUT
+				 )
+AS
+
+BEGIN 
+SET NOCOUNT ON
+
+INSERT INTO BeginPayment
+            (
+			 BillingAccount,
+			 ServiceRequest,
+			 PaymentReference,
+			 CreateToken
+			)
+	  VALUES(
+	          @BILLING_ACCOUNT,
+			  @SERVICE_REQUEST,
+			  @PAYMENT_REFERENCE,
+			  @CREATE_TOKEN
+			)
+
+    SET @BEGIN_PAYMENT_ID  = IDENT_CURRENT('BeginPayment')
+
+SET NOCOUNT OFF
+END 
