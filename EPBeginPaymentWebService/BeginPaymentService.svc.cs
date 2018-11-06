@@ -19,13 +19,17 @@ namespace EPBeginPaymentWebService
     public class BeginPaymentService : IBeginPaymentService
     {
 
-        private IDbConnection Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["BeginPaymentDevConnection"].ConnectionString);
+        private readonly IDbConnection Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["BeginPaymentDevConnection"].ConnectionString);
 
         public void CreateBeginPayment(BeginPayment bpo)
         {
             var logger = new LoggerConfiguration()
                          .MinimumLevel.Debug()
-                         .WriteTo.RollingFile(new CompactJsonFormatter(), @"E:\LOG\EnterprisePaymentLog.json")
+                         .WriteTo.RollingFile(new CompactJsonFormatter(), 
+                                              @"E:\LOG\EnterprisePaymentLog.json",
+                                              shared:true,
+                                              retainedFileCountLimit:30
+                                              )
                          .CreateLogger();
 
             
@@ -62,7 +66,7 @@ namespace EPBeginPaymentWebService
                                         StaticBeginEnterpricePayment.PaymentStage,
                                         StaticBeginEnterpricePayment.ComunicationStep);
 
-                    conn.QueryAsync(StaticBeginEnterpricePayment.SP_CREATE_BEGIN_ENTERPRISE_PAYMENT, 
+                    conn.Query(StaticBeginEnterpricePayment.SP_CREATE_BEGIN_ENTERPRISE_PAYMENT, 
                                       parameters, 
                                       commandType: CommandType.StoredProcedure);
 

@@ -22,6 +22,7 @@ namespace EPBeginPaymentWebService
         string _ServiceRequest = string.Empty;
         string _PaymentReference = string.Empty;
         string _CreateToken = string.Empty;
+       
 
         [DataMember]
         public string BillingAccount
@@ -50,6 +51,8 @@ namespace EPBeginPaymentWebService
             get { return _CreateToken; }
             set { _CreateToken = value;}
         }
+
+
 
     }
 }
