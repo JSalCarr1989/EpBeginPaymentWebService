@@ -21,7 +21,7 @@ namespace EPBeginPaymentWebService
 
         private readonly IDbConnection Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["BeginPaymentDevConnection"].ConnectionString);
 
-        public void CreateBeginPayment(BeginPayment bpo)
+        public string CreateBeginPayment(BeginPayment bpo)
         {
             var logger = new LoggerConfiguration()
                          .MinimumLevel.Debug()
@@ -79,11 +79,14 @@ namespace EPBeginPaymentWebService
                                         bpo.ServiceRequest,
                                         bpo.BillingAccount);
 
+                    return $"Successful Operation for Service Request:{bpo.ServiceRequest} , Billing Account: {bpo.BillingAccount} and Payment Reference: {bpo.PaymentReference}";
+
                 }
             }
             catch(Exception ex)
             {
-                logger.Error(ex, $"Failed Operation for Service Request:{bpo.ServiceRequest} , Billing Account: {bpo.BillingAccount} and Payment Reference: {bpo.PaymentReference}  ");
+                logger.Error(ex, $"Unsuccessful Operation for Service Request:{bpo.ServiceRequest} , Billing Account: {bpo.BillingAccount} and Payment Reference: {bpo.PaymentReference}");
+                return $"Unsuccessful Operation for Service Request:{bpo.ServiceRequest} , Billing Account: {bpo.BillingAccount} and Payment Reference: {bpo.PaymentReference}";
             }
         }
     }

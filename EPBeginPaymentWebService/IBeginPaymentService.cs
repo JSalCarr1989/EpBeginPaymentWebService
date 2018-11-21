@@ -12,7 +12,7 @@ namespace EPBeginPaymentWebService
     public interface IBeginPaymentService
     {
         [OperationContract]
-        void CreateBeginPayment(BeginPayment bpo);
+        string CreateBeginPayment(BeginPayment bpo);
     }
 
     [DataContract]
