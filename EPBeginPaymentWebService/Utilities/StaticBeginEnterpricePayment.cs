@@ -71,12 +71,13 @@ namespace EPBeginPaymentWebService.Utilities
             get
             {
                 return "Before Insert Begin Payment with the following data:" +
-                                        "BillingAccount: {BillingAccount} " +
-                                        "ServiceRequest: {ServiceRequest} " +
-                                        "PaymentReference:{PaymentReference} " +
-                                        "CreateToken:{CreateToken} " +
-                                        "PaymentStage:{LogPaymentStage} " +
-                                        "ComunicationStep:{LogComunicationStep} ";
+                                        "BillingAccount: {@BillingAccount} " +
+                                        "ServiceRequest: {@ServiceRequest} " +
+                                        "PaymentReference:{@PaymentReference} " +
+                                        "CreateToken:{@CreateToken} " +
+                                        "PaymentStage:{@LogPaymentStage} " +
+                                        "ComunicationStep:{@LogComunicationStep} "+
+                                        "Application:{@Application}";
 
             }
         }
@@ -97,6 +98,14 @@ namespace EPBeginPaymentWebService.Utilities
             }
         }
 
+        public static string Application
+        {
+            get
+            {
+                return "WCF WEB SERVICE";
+            }
+        }
+
         public static string SP_CREATE_BEGIN_ENTERPRISE_PAYMENT
         {
             get
@@ -105,15 +114,20 @@ namespace EPBeginPaymentWebService.Utilities
             }
         }
 
+
+
         public static string LogTemplateAfterInsert
         {
             get
             {
 
                 return "After Insert Begin Payment with the following data:" +
-                        "Generated Id for Begin Payment {BeginPaymentGeneratedId}" +
-                        "from the ServiceRequest: {ServiceRequest}" +
-                        "and BillingAccount: {BillingAccount}";
+                        "Generated Id for Begin Payment {@BeginPaymentGeneratedId}" +
+                        "from the ServiceRequest: {@ServiceRequest}" +
+                        "and BillingAccount: {@BillingAccount}"+
+                        "PaymentStage:{@PaymentStage}"+
+                        "ComunicationStep:{@ComunicationStep}"+
+                        "Application:{@Application}";
             }
         }
     }
