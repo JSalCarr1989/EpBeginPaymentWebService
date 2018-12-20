@@ -99,6 +99,12 @@
     <Compile Include="BeginPaymentService.svc.cs">
       <DependentUpon>BeginPaymentService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IBeginPaymentRepository.cs" />
+    <Compile Include="Interfaces\IDbConnectionRepository.cs" />
+    <Compile Include="Interfaces\IDbLoggerRepository.cs" />
+    <Compile Include="Models\BeginPaymentRepository.cs" />
+    <Compile Include="Models\DbLoggerRepository.cs" />
+    <Compile Include="Models\DbConnectionRepository.cs" />
     <Compile Include="Utilities\StaticBeginEnterpricePayment.cs" />
     <Compile Include="IBeginPaymentService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
