@@ -26,7 +26,5 @@ namespace EPBeginPaymentWebService
         [DataMember]
         public string CreateToken { get; set; } = string.Empty;
 
-
-
     }
 }

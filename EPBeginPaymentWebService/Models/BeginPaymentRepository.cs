@@ -9,7 +9,7 @@ namespace EPBeginPaymentWebService.Models
     public class BeginPaymentRepository : IBeginPaymentRepository
     {
         private readonly IDbConnectionRepository _dbConnectionRepository;
-        private readonly IDbConnection _connection;
+        private IDbConnection _connection;
         private readonly IDbLoggerRepository _dbLoggerRepository;
         private  string _resultMessage;
 
@@ -17,7 +17,36 @@ namespace EPBeginPaymentWebService.Models
         {
             _dbConnectionRepository = new DbConnectionRepository();
             _dbLoggerRepository = new DbLoggerRepository();
-            _connection = _dbConnectionRepository.CreateDbConnection();
+            
+            
+        }
+
+        public BeginPaymentDTO GetBeginPayment(BeginPayment beginPayment)
+        {
+            BeginPaymentDTO result = new BeginPaymentDTO();
+            try
+            {
+                using (_connection = _dbConnectionRepository.CreateDbConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add(StaticBeginEnterpricePayment.SERVICE_REQUEST, beginPayment.ServiceRequest);
+
+                    _connection.Open();
+
+                    result = _connection.QueryFirstOrDefault<BeginPaymentDTO>(
+                        StaticBeginEnterpricePayment.SP_EP_GET_BEGINPAYMENT_BY_SERVICEREQUEST,
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                        );
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return result;
+            
         }
 
         public string InsertBeginPayment(BeginPayment beginPayment)
@@ -29,7 +58,7 @@ namespace EPBeginPaymentWebService.Models
                 int id;
             
  
-                using (_connection)
+                using (_connection = _dbConnectionRepository.CreateDbConnection())
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add(StaticBeginEnterpricePayment.BILLING_ACCOUNT, beginPayment.BillingAccount);
@@ -50,7 +79,7 @@ namespace EPBeginPaymentWebService.Models
 
                     _dbLoggerRepository.LogCreateBeginPayment(beginPayment,id);
 
-                    _resultMessage = $"Successful Operation for Service Request:{beginPayment.ServiceRequest} , Billing Account: {beginPayment.BillingAccount} and Payment Reference: {beginPayment.PaymentReference}";
+                    _resultMessage = $"Operacion Satisfactoria para la Service Request:{beginPayment.ServiceRequest} , Billing Account: {beginPayment.BillingAccount} and Payment Reference: {beginPayment.PaymentReference}";
 
                     return _resultMessage;
 
@@ -58,9 +87,38 @@ namespace EPBeginPaymentWebService.Models
             }
             catch (Exception ex)
             {
-                _resultMessage = $"Unsuccessful Operation for Service Request:{beginPayment.ServiceRequest} , Billing Account: {beginPayment.BillingAccount} and Payment Reference: {beginPayment.PaymentReference}";
+                _resultMessage = $"Operacion Fallida para la Service Request:{beginPayment.ServiceRequest} , Billing Account: {beginPayment.BillingAccount} and Payment Reference: {beginPayment.PaymentReference}";
                 return _resultMessage;
             }
+        }
+
+        public string UpdateBeginPayment(int beginPaymentId, string createToken)
+        {
+            string result = string.Empty;
+
+            try
+            {
+                using (_connection = _dbConnectionRepository.CreateDbConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add(StaticBeginEnterpricePayment.BEGIN_PAYMENT_ID,beginPaymentId);
+                    parameters.Add(StaticBeginEnterpricePayment.CREATE_TOKEN, createToken);
+
+                    _connection.Open();
+
+                    _connection.Query(
+                        StaticBeginEnterpricePayment.SP_UPDATE_BEGINPAYMENT_CREATE_TOKEN,
+                        parameters,
+                        commandType: CommandType.StoredProcedure);
+                }
+               
+            }
+            catch(Exception ex)
+            {
+
+            }
+            return result;
+            
         }
     }
 }

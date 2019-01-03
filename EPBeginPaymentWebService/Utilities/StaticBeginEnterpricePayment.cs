@@ -33,5 +33,9 @@
         public static string Application => "WCF WEB SERVICE";
 
         public static string SP_CREATE_BEGIN_ENTERPRISE_PAYMENT => "SP_CREATE_BEGIN_ENTERPRISE_PAYMENT";
+
+        public static string SP_EP_GET_BEGINPAYMENT_BY_SERVICEREQUEST => "SP_EP_GET_BEGINPAYMENT_BY_SERVICEREQUEST";
+
+        public static string SP_UPDATE_BEGINPAYMENT_CREATE_TOKEN => "SP_UPDATE_BEGINPAYMENT_CREATE_TOKEN";
     }
 }
