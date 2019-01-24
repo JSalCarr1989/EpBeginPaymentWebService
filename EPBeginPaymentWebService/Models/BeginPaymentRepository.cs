@@ -11,12 +11,14 @@ namespace EPBeginPaymentWebService.Models
         private readonly IDbConnectionRepository _dbConnectionRepository;
         private IDbConnection _connection;
         private readonly IDbLoggerRepository _dbLoggerRepository;
-        private  string _resultMessage;
+        private readonly IDbLoggerErrorRepository _dbLoggerErrorRepository;
+        
 
         public BeginPaymentRepository()
         {
             _dbConnectionRepository = new DbConnectionRepository();
             _dbLoggerRepository = new DbLoggerRepository();
+            _dbLoggerErrorRepository = new DbLoggerErrorRepository();
             
             
         }
@@ -24,6 +26,7 @@ namespace EPBeginPaymentWebService.Models
         public BeginPaymentDTO GetBeginPayment(BeginPayment beginPayment)
         {
             BeginPaymentDTO result = new BeginPaymentDTO();
+
             try
             {
                 using (_connection = _dbConnectionRepository.CreateDbConnection())
@@ -40,9 +43,10 @@ namespace EPBeginPaymentWebService.Models
                         );
                 }
             }
+
             catch(Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                _dbLoggerErrorRepository.LogGetBeginPaymentError(ex.ToString(), beginPayment);
             }
 
             return result;
@@ -51,6 +55,9 @@ namespace EPBeginPaymentWebService.Models
 
         public string InsertBeginPayment(BeginPayment beginPayment)
         {
+
+            string _resultMessage = string.Empty;
+
             try
             {
 
@@ -77,19 +84,21 @@ namespace EPBeginPaymentWebService.Models
 
                     id = parameters.Get<int>(StaticBeginEnterpricePayment.BEGIN_PAYMENT_ID_OUTPUT_SEARCH);
 
-                    _dbLoggerRepository.LogCreateBeginPayment(beginPayment,id);
+                    
 
-                    _resultMessage = $"Operacion Satisfactoria para la Service Request:{beginPayment.ServiceRequest} , Billing Account: {beginPayment.BillingAccount} and Payment Reference: {beginPayment.PaymentReference}";
+                    _resultMessage = StaticBeginEnterpricePayment.CREATED_RESPONSE_CODE;
 
-                    return _resultMessage;
+                    _dbLoggerRepository.LogCreateBeginPayment(beginPayment, id, _resultMessage);
 
                 }
             }
             catch (Exception ex)
             {
-                _resultMessage = $"Operacion Fallida para la Service Request:{beginPayment.ServiceRequest} , Billing Account: {beginPayment.BillingAccount} and Payment Reference: {beginPayment.PaymentReference}";
-                return _resultMessage;
+                _resultMessage = StaticBeginEnterpricePayment.ERROR_RESPONSE_CODE;
+                _dbLoggerErrorRepository.LogCreateBeginPaymentError(ex.ToString(),beginPayment);
             }
+
+            return _resultMessage;
         }
 
         public string UpdateBeginPayment(int beginPaymentId, string createToken)
@@ -110,13 +119,19 @@ namespace EPBeginPaymentWebService.Models
                         StaticBeginEnterpricePayment.SP_UPDATE_BEGINPAYMENT_CREATE_TOKEN,
                         parameters,
                         commandType: CommandType.StoredProcedure);
+
+                    result = StaticBeginEnterpricePayment.UPDATED_RESPONSE_CODE;
+
+                    _dbLoggerRepository.LogUpdateBeginPayment(beginPaymentId, createToken, result);
                 }
                
             }
             catch(Exception ex)
             {
-
+                result = StaticBeginEnterpricePayment.ERROR_RESPONSE_CODE;
+                _dbLoggerErrorRepository.LogUpdateBeginPaymentError(ex.ToString(), beginPaymentId);
             }
+
             return result;
             
         }

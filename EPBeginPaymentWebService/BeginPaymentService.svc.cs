@@ -1,5 +1,6 @@
 ﻿using EPBeginPaymentWebService.Interfaces;
 using EPBeginPaymentWebService.Models;
+using EPBeginPaymentWebService.Utilities;
 
 namespace EPBeginPaymentWebService
 {
@@ -28,32 +29,27 @@ namespace EPBeginPaymentWebService
 
             string result = string.Empty;
 
-            var paymentHasResponse = _logPaymentRepository.ValidateIfPaymentInfoHashResponse(bpo);
+            var paymentHasResponse = _logPaymentRepository.ValidateIfPaymentInfoHasResponse(bpo);
 
-            //si no tiene respuesta de pago previa
-            if (paymentHasResponse)
-            {
-                result = $"La Service Request que se trata de procesar ya fue procesada anteriormente";
-            }else
+            if(paymentHasResponse == StaticBeginEnterpricePayment.WITHOUT_RESPONSE)
             {
                 BeginPaymentDTO _beginPayment = _beginPaymentRepository.GetBeginPayment(bpo);
 
-                //si existe en beginpayment
+                
                 if (_beginPayment != null)
                 {
-                    //hacemos update 
+                    
                     result = _beginPaymentRepository.UpdateBeginPayment(_beginPayment.BeginPaymentId, bpo.CreateToken);
                 }
-                else // si no existe en beginpayment
+                else
                 {
-                    //creamos un nuevo registro
+                    
                     result = _beginPaymentRepository.InsertBeginPayment(bpo);
                 }
-            }
-
-            
-
-            
+            }else
+            {
+                result = paymentHasResponse;
+            }            
 
             return result;
 

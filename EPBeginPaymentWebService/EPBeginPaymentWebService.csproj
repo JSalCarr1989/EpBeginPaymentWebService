@@ -101,10 +101,12 @@
     </Compile>
     <Compile Include="Interfaces\IBeginPaymentRepository.cs" />
     <Compile Include="Interfaces\IDbConnectionRepository.cs" />
+    <Compile Include="Interfaces\IDbLoggerErrorRepository.cs" />
     <Compile Include="Interfaces\IDbLoggerRepository.cs" />
     <Compile Include="Interfaces\ILogPaymentRepository.cs" />
     <Compile Include="Models\BeginPaymentDTO.cs" />
     <Compile Include="Models\BeginPaymentRepository.cs" />
+    <Compile Include="Models\DbLoggerErrorRepository.cs" />
     <Compile Include="Models\DbLoggerRepository.cs" />
     <Compile Include="Models\DbConnectionRepository.cs" />
     <Compile Include="Models\LogPaymentRepository.cs" />

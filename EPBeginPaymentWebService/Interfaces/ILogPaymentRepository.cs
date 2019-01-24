@@ -2,6 +2,6 @@
 {
     public interface ILogPaymentRepository
     {
-        bool ValidateIfPaymentInfoHashResponse(BeginPayment beginPayment);
+        string ValidateIfPaymentInfoHasResponse(BeginPayment beginPayment);
     }
 }
