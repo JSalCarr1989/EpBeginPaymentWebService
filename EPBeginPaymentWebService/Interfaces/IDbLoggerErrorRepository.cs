@@ -8,9 +8,9 @@ namespace EPBeginPaymentWebService.Interfaces
 {
     interface IDbLoggerErrorRepository
     {
-        void LogValidateIfPaymentInfoHasResponseError(string error,BeginPayment beginPayment);
-        void LogCreateBeginPaymentError(string error,BeginPayment beginPayment);
-        void LogUpdateBeginPaymentError(string error, int beginPaymentId);
-        void LogGetBeginPaymentError(string error, BeginPayment beginPayment);
+        void LogValidateIfPaymentInfoHasResponseError(string error,BeginPayment beginPayment , string FileName, string MethodName);
+        void LogCreateBeginPaymentError(string error,BeginPayment beginPayment, string FileName, string MethodName);
+        void LogUpdateBeginPaymentError(string error, int beginPaymentId, string FileName, string MethodName);
+        void LogGetBeginPaymentError(string error, BeginPayment beginPayment, string FileName, string MethodName);
     }
 }

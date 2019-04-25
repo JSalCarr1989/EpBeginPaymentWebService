@@ -3,6 +3,7 @@ using EPBeginPaymentWebService.Utilities;
 using System.Data;
 using Dapper;
 using System;
+using System.Reflection;
 
 namespace EPBeginPaymentWebService.Models
 {
@@ -12,20 +13,26 @@ namespace EPBeginPaymentWebService.Models
         private IDbConnection _connection;
         private readonly IDbLoggerRepository _dbLoggerRepository;
         private readonly IDbLoggerErrorRepository _dbLoggerErrorRepository;
+        private readonly string _fileName;
         
+
+
 
         public BeginPaymentRepository()
         {
             _dbConnectionRepository = new DbConnectionRepository();
             _dbLoggerRepository = new DbLoggerRepository();
             _dbLoggerErrorRepository = new DbLoggerErrorRepository();
-            
-            
+            _fileName = this.GetType().Name;
+
+
+
         }
 
         public BeginPaymentDTO GetBeginPayment(BeginPayment beginPayment)
         {
             BeginPaymentDTO result = new BeginPaymentDTO();
+            string _methodName = MethodBase.GetCurrentMethod().Name;
 
             try
             {
@@ -46,7 +53,7 @@ namespace EPBeginPaymentWebService.Models
 
             catch(Exception ex)
             {
-                _dbLoggerErrorRepository.LogGetBeginPaymentError(ex.ToString(), beginPayment);
+                _dbLoggerErrorRepository.LogGetBeginPaymentError(ex.ToString(), beginPayment,_fileName, _methodName);
             }
 
             return result;
@@ -57,14 +64,15 @@ namespace EPBeginPaymentWebService.Models
         {
 
             string _resultMessage = string.Empty;
+            string _methodName = MethodBase.GetCurrentMethod().Name;
 
             try
             {
 
 
                 int id;
-            
- 
+                
+
                 using (_connection = _dbConnectionRepository.CreateDbConnection())
                 {
                     var parameters = new DynamicParameters();
@@ -88,14 +96,16 @@ namespace EPBeginPaymentWebService.Models
 
                     _resultMessage = StaticBeginEnterpricePayment.CREATED_RESPONSE_CODE;
 
-                    _dbLoggerRepository.LogCreateBeginPayment(beginPayment, id, _resultMessage);
+                   
+
+                    _dbLoggerRepository.LogCreateBeginPayment(beginPayment, id, _resultMessage, _fileName, _methodName);
 
                 }
             }
             catch (Exception ex)
             {
                 _resultMessage = StaticBeginEnterpricePayment.ERROR_RESPONSE_CODE;
-                _dbLoggerErrorRepository.LogCreateBeginPaymentError(ex.ToString(),beginPayment);
+                _dbLoggerErrorRepository.LogCreateBeginPaymentError(ex.ToString(),beginPayment, _fileName, _methodName);
             }
 
             return _resultMessage;
@@ -104,6 +114,7 @@ namespace EPBeginPaymentWebService.Models
         public string UpdateBeginPayment(int beginPaymentId, string createToken)
         {
             string result = string.Empty;
+            string _methodName = MethodBase.GetCurrentMethod().Name;
 
             try
             {
@@ -122,14 +133,14 @@ namespace EPBeginPaymentWebService.Models
 
                     result = StaticBeginEnterpricePayment.UPDATED_RESPONSE_CODE;
 
-                    _dbLoggerRepository.LogUpdateBeginPayment(beginPaymentId, createToken, result);
+                    _dbLoggerRepository.LogUpdateBeginPayment(beginPaymentId, createToken, result, _fileName, _methodName);
                 }
                
             }
             catch(Exception ex)
             {
                 result = StaticBeginEnterpricePayment.ERROR_RESPONSE_CODE;
-                _dbLoggerErrorRepository.LogUpdateBeginPaymentError(ex.ToString(), beginPaymentId);
+                _dbLoggerErrorRepository.LogUpdateBeginPaymentError(ex.ToString(), beginPaymentId, _fileName, _methodName);
             }
 
             return result;

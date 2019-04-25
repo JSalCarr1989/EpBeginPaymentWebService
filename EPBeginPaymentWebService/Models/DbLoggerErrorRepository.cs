@@ -22,46 +22,47 @@ namespace EPBeginPaymentWebService.Models
              .CreateLogger();
         }
 
-        public static string LogValidateIfPaymentInfoHasResponseTemplateMessage => @"An error:{@error} has ocurred in the function ValidateIfPaymentInfoHasResponse
-                                                                                              for the ServiceRequest:{@ServiceRequest} and PaymentReference:{@PaymentReference}";
-
-        public static string LogCreateBeginPaymentErrorTemplateMessage => @"An error:{@error} has ocurred in the function InsertBeginPayment
-                                                                                  for the ServiceRequest:{@ServiceRequest} and PaymentReference:{@PaymentReference}";
-
-        public static string LogUpdateBeginPaymentErrorTemplateMessage => @"An error:{@error} has ocurred in the function UpdateBeginPayment
-                                                                                  for the BeginPaymentId:{@beginPaymentId}";
-
-        public static string LogGetBeginPaymentErrorTemplateMessage => @"An error:{@error} has ocurred in the function GetBeginPayment
-                                                                                  for the ServiceRequest:{@ServiceRequest} and PaymentReference:{@PaymentReference}";
+        public static string LogValidateIfPaymentInfoHasResponseTemplateMessage => @"[Error]:{@error},[File]:{@File},[Function]:{@Function},[Data]:[ServiceRequest:{@ServiceRequest},PaymentReference:{@PaymentReference}]";
+        public static string LogCreateBeginPaymentErrorTemplateMessage => @"[Error]:{@error},[File]:{@File},[Function]:{@Function},[Data]:[ServiceRequest:{@ServiceRequest},PaymentReference:{@PaymentReference}]";
+        public static string LogUpdateBeginPaymentErrorTemplateMessage => @"[Error]:{@error},[File]:{@File},[Function]:{@Function},[Data]:[BeginPaymentId:{@beginPaymentId}]";
+        public static string LogGetBeginPaymentErrorTemplateMessage => @"[Error]:{@error},[File]:{@File},[Function]:{@Function},[Data]:[ServiceRequest:{@ServiceRequest},PaymentReference:{@PaymentReference}]";
 
 
 
-        public void LogCreateBeginPaymentError(string error,BeginPayment beginPayment)
+        public void LogCreateBeginPaymentError(string error,BeginPayment beginPayment, string FileName, string MethodName)
         {
             _logger.Error(LogCreateBeginPaymentErrorTemplateMessage,
+                          FileName,
+                          MethodName,
                           error,
                           beginPayment.ServiceRequest,
                           beginPayment.PaymentReference);
         }
 
-        public void LogGetBeginPaymentError(string error, BeginPayment beginPayment)
+        public void LogGetBeginPaymentError(string error, BeginPayment beginPayment, string FileName, string MethodName)
         {
             _logger.Error(LogGetBeginPaymentErrorTemplateMessage,
+                         FileName,
+                         MethodName,
                          error,
                          beginPayment.ServiceRequest,
                          beginPayment.PaymentReference);
         }
 
-        public void LogUpdateBeginPaymentError(string error, int beginPaymentId)
+        public void LogUpdateBeginPaymentError(string error, int beginPaymentId, string FileName, string MethodName)
         {
             _logger.Error(LogUpdateBeginPaymentErrorTemplateMessage,
+                          FileName,
+                          MethodName,
                           error,
                           beginPaymentId);
         }
 
-        public void LogValidateIfPaymentInfoHasResponseError(string error,BeginPayment beginPayment)
+        public void LogValidateIfPaymentInfoHasResponseError(string error,BeginPayment beginPayment, string FileName, string MethodName)
         {
             _logger.Error(LogValidateIfPaymentInfoHasResponseTemplateMessage,
+                          FileName,
+                          MethodName,
                           error,
                           beginPayment.ServiceRequest,
                           beginPayment.PaymentReference);

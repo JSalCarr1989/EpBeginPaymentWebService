@@ -3,6 +3,7 @@ using EPBeginPaymentWebService.Utilities;
 using Dapper;
 using System.Data;
 using System;
+using System.Reflection;
 
 namespace EPBeginPaymentWebService.Models
 {
@@ -12,6 +13,7 @@ namespace EPBeginPaymentWebService.Models
         private readonly IDbConnectionRepository _dbConnectionRepository;
         private readonly IDbConnection _connection;
         private readonly IDbLoggerErrorRepository _dbLoggerErrorRepository;
+        private readonly string _fileName;
 
 
         public LogPaymentRepository()
@@ -19,11 +21,13 @@ namespace EPBeginPaymentWebService.Models
             _dbConnectionRepository = new DbConnectionRepository();
             _connection = _dbConnectionRepository.CreateDbConnection();
             _dbLoggerErrorRepository = new DbLoggerErrorRepository();
+            _fileName = this.GetType().Name;
         }
 
         public string ValidateIfPaymentInfoHasResponse(BeginPayment beginPayment)
         {
             string resultMessage = string.Empty;
+            string _methodName = MethodBase.GetCurrentMethod().Name;
 
             try
             {
@@ -59,7 +63,7 @@ namespace EPBeginPaymentWebService.Models
             }
             catch(Exception ex)
             {
-                _dbLoggerErrorRepository.LogValidateIfPaymentInfoHasResponseError(ex.ToString(),beginPayment);
+                _dbLoggerErrorRepository.LogValidateIfPaymentInfoHasResponseError(ex.ToString(),beginPayment,_fileName,_methodName);
                 return resultMessage = StaticLogPaymentProperties.ERROR_RESPONSE_CODE;
             }
 
