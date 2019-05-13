@@ -96,6 +96,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Data\DosAttackModule.cs" />
     <Compile Include="BeginPaymentService.svc.cs">
       <DependentUpon>BeginPaymentService.svc</DependentUpon>
     </Compile>
@@ -115,9 +116,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\StaticLogPaymentProperties.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
